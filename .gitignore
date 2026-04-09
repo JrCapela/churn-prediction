@@ -1,0 +1,23 @@
+# Ambiente
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Dados sensíveis
+.env
+data/raw/
+data/processed/
+
+# Modelos treinados
+models/
+
+# MLflow
+mlruns/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
