@@ -18,7 +18,7 @@ async def lifespan(app: FastAPI):
     global model, scaler
 
     root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    model_path = os.path.join(root_dir, os.getenv("MODEL_PATH", "models/LogisticRegression.pkl"))
+    model_path = os.path.join(root_dir, "models", "LogisticRegression.pkl")
     scaler_path = os.path.join(root_dir, "models", "scaler.pkl")
 
     if not os.path.exists(model_path):
@@ -86,7 +86,8 @@ def predict(customer: CustomerInput):
         data = data.drop(columns=['Churn'], errors='ignore')
 
         # Align columns with training data
-        root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        api_dir = os.path.dirname(os.path.abspath(__file__))
+        root_dir = os.path.dirname(api_dir)
         columns_path = os.path.join(root_dir, "models", "feature_columns.pkl")
         expected_columns = joblib.load(columns_path)
         data = data.reindex(columns=expected_columns, fill_value=0)

@@ -19,7 +19,7 @@ def clean_data(df: pd.DataFrame) -> pd.DataFrame:
 
     # Fix TotalCharges — convert to float, fill nulls with median
     df['TotalCharges'] = pd.to_numeric(df['TotalCharges'], errors='coerce')
-    df['TotalCharges'].fillna(df['TotalCharges'].median(), inplace=True)
+    df['TotalCharges'] = df['TotalCharges'].fillna(df['TotalCharges'].median())
 
     # Drop TotalCharges — highly correlated with tenure (0.83)
     df.drop(columns=['TotalCharges'], inplace=True)
