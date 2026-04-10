@@ -38,24 +38,26 @@ def train_all(data_path: str):
     absolute_path = os.path.join(root_dir, data_path) if not os.path.isabs(data_path) else data_path
     X_train, X_test, y_train, y_test = preprocess_pipeline(absolute_path, save_scaler=True)
 
+    # Save feature columns for API alignment
+    columns_path = os.path.join(root_dir, 'models', 'feature_columns.pkl')
+    joblib.dump(list(X_train.columns), columns_path)
+    print(f"Feature columns saved ✅")
+
     models = get_models()
     results = {}
 
     for name, model in models.items():
+        model_path = os.path.join(root_dir, 'models', f'{name}.pkl')
         print(f"\nTraining {name}...")
+        print(f"Saving to: {model_path}")
 
         with mlflow.start_run(run_name=name):
             model.fit(X_train, y_train)
-
-            # Log parameters
             mlflow.log_params(model.get_params())
-
-            # Log model
             mlflow.sklearn.log_model(model, artifact_path="model")
 
-            # Save locally
-            os.makedirs("models", exist_ok=True)
-            joblib.dump(model, f"models/{name}.pkl")
+            os.makedirs(os.path.dirname(model_path), exist_ok=True)
+            joblib.dump(model, model_path)
             print(f"{name} saved ✅")
 
             results[name] = model

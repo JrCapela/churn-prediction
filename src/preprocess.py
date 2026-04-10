@@ -89,9 +89,11 @@ def preprocess_pipeline(path: str, save_scaler: bool = True):
     X_train, X_test, y_train, y_test = split_data(df)
 
     if save_scaler:
-        os.makedirs('models', exist_ok=True)
-        joblib.dump(scaler, 'models/scaler.pkl')
-        print("Scaler saved to models/scaler.pkl ✅")
+        root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        scaler_path = os.path.join(root_dir, 'models', 'scaler.pkl')
+        os.makedirs(os.path.dirname(scaler_path), exist_ok=True)
+        joblib.dump(scaler, scaler_path)
+        print(f"Scaler saved to {scaler_path} ✅")
 
     print(f"X_train: {X_train.shape}")
     print(f"X_test:  {X_test.shape}")
