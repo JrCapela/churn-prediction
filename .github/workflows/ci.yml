@@ -22,12 +22,22 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements-dev.txt
 
-      - name: Run tests
-        run: pytest tests/ -v --tb=short
+      - name: Install DVC with GCS support
+        run: pip install dvc dvc-gs
 
-      - name: Upload test results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results
-          path: .pytest_cache/
+      - name: Authenticate to Google Cloud
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+        run: |
+          echo "$GOOGLE_CREDENTIALS" > /tmp/gcs_credentials.json
+          export GOOGLE_APPLICATION_CREDENTIALS=/tmp/gcs_credentials.json
+          echo "GOOGLE_APPLICATION_CREDENTIALS=/tmp/gcs_credentials.json" >> $GITHUB_ENV
+
+      - name: Pull data and models from GCS
+        run: dvc pull
+
+      - name: Run unit tests
+        run: pytest tests/ -v -m "unit" --tb=short
+
+      - name: Run integration tests
+        run: pytest tests/ -v -m "integration" --tb=short
