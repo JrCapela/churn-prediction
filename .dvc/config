@@ -1,0 +1,5 @@
+[core]
+    remote = myremote
+['remote "myremote"']
+    url = gs://churn-prediction-mldata
+    credentialpath = C:\Users\jcape\Downloads\project-ca3d38e1-8957-4aa6-84d-a47a413b4707.json

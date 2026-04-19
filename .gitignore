@@ -6,11 +6,16 @@ __pycache__/
 
 # Dados sensíveis
 .env
-data/raw/
-data/processed/
+data/raw/**
+!data/raw/**/*.dvc
+!data/raw/.gitkeep
+data/processed/**
+!data/processed/.gitkeep
 
 # Modelos treinados
-models/
+models/**
+!models/**/*.dvc
+!models/.gitkeep
 
 # MLflow
 mlruns/
@@ -23,3 +28,4 @@ mlartifacts/
 .DS_Store
 Thumbs.db
 .idea/
+/models
