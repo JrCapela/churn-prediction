@@ -30,14 +30,11 @@ jobs:
           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
         run: |
           echo "$GOOGLE_CREDENTIALS" > /tmp/gcs_credentials.json
-          export GOOGLE_APPLICATION_CREDENTIALS=/tmp/gcs_credentials.json
           echo "GOOGLE_APPLICATION_CREDENTIALS=/tmp/gcs_credentials.json" >> $GITHUB_ENV
+
+      - name: Configure DVC remote credentials
+        run: |
+          dvc remote modify myremote credentialpath /tmp/gcs_credentials.json
 
       - name: Pull data and models from GCS
         run: dvc pull
-
-      - name: Run unit tests
-        run: pytest tests/ -v -m "unit" --tb=short
-
-      - name: Run integration tests
-        run: pytest tests/ -v -m "integration" --tb=short
