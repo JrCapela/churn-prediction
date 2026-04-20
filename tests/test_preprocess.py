@@ -35,24 +35,28 @@ def get_sample_df():
     }])
 
 
+@pytest.mark.unit
 def test_clean_data_drops_customer_id():
     df = get_sample_df()
     result = clean_data(df)
     assert 'customerID' not in result.columns
 
 
+@pytest.mark.unit
 def test_clean_data_drops_total_charges():
     df = get_sample_df()
     result = clean_data(df)
     assert 'TotalCharges' not in result.columns
 
 
+@pytest.mark.unit
 def test_clean_data_encodes_churn():
     df = get_sample_df()
     result = clean_data(df)
     assert result['Churn'].dtype in [int, np.int64, np.int32]
 
 
+@pytest.mark.unit
 def test_encode_features_no_string_columns():
     df = get_sample_df()
     df = clean_data(df)
@@ -61,6 +65,7 @@ def test_encode_features_no_string_columns():
     assert len(string_cols) == 0
 
 
+@pytest.mark.unit
 def test_encode_features_creates_dummies():
     df = get_sample_df()
     df = clean_data(df)
@@ -69,6 +74,7 @@ def test_encode_features_creates_dummies():
     assert 'InternetService_Fiber optic' in df.columns
 
 
+@pytest.mark.integration
 def test_preprocess_pipeline_shape():
     root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     data_path = os.path.join(root_dir, 'data', 'raw', 'telco_churn.csv')

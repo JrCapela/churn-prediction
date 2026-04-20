@@ -35,23 +35,27 @@ def client():
         yield c
 
 
+@pytest.mark.integration
 def test_root_endpoint(client):
     response = client.get("/")
     assert response.status_code == 200
     assert "Churn Prediction API" in response.json()["message"]
 
 
+@pytest.mark.integration
 def test_health_endpoint(client):
     response = client.get("/health")
     assert response.status_code == 200
     assert response.json()["status"] == "healthy"
 
 
+@pytest.mark.integration
 def test_predict_endpoint_returns_200(client):
     response = client.post("/predict", json=sample_customer)
     assert response.status_code == 200
 
 
+@pytest.mark.integration
 def test_predict_output_fields(client):
     response = client.post("/predict", json=sample_customer)
     data = response.json()
@@ -61,12 +65,14 @@ def test_predict_output_fields(client):
     assert "message" in data
 
 
+@pytest.mark.integration
 def test_predict_probability_range(client):
     response = client.post("/predict", json=sample_customer)
     prob = response.json()["churn_probability"]
     assert 0.0 <= prob <= 1.0
 
 
+@pytest.mark.unit
 def test_predict_invalid_input(client):
     response = client.post("/predict", json={"gender": "Unknown"})
     assert response.status_code == 422
