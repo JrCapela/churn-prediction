@@ -12,18 +12,27 @@ from src.preprocess import preprocess_pipeline
 def get_models():
     return {
         "LogisticRegression": LogisticRegression(
+            C=0.115,
+            max_iter=816,
+            solver='saga',
             class_weight='balanced',
-            max_iter=1000,
             random_state=42
         ),
         "RandomForest": RandomForestClassifier(
+            n_estimators=149,
+            max_depth=13,
+            min_samples_split=7,
+            min_samples_leaf=5,
             class_weight='balanced',
-            n_estimators=100,
             random_state=42
         ),
         "XGBoost": XGBClassifier(
+            n_estimators=151,
+            max_depth=5,
+            learning_rate=0.0245,
+            subsample=0.814,
+            colsample_bytree=0.836,
             scale_pos_weight=3,
-            n_estimators=100,
             random_state=42,
             eval_metric='logloss'
         )

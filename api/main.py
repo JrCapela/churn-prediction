@@ -18,7 +18,7 @@ async def lifespan(app: FastAPI):
     global model, scaler
 
     root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    model_path = os.path.join(root_dir, "models", "LogisticRegression.pkl")
+    model_path = os.path.join(root_dir, "models", "XGBoost.pkl")
     scaler_path = os.path.join(root_dir, "models", "scaler.pkl")
 
     if not os.path.exists(model_path):
