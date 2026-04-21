@@ -2,6 +2,12 @@ import streamlit as st
 import requests
 import pandas as pd
 import plotly.express as px
+from dotenv import load_dotenv
+import os
+
+load_dotenv(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), '.env'))
+API_URL = os.getenv("API_URL", "http://localhost:8000")
+API_KEY = os.getenv("API_KEY", "churn_secret_key_2024")
 
 st.set_page_config(page_title="Customers", page_icon="👥", layout="wide")
 
@@ -56,7 +62,11 @@ if uploaded_file is not None:
         for i, row in df.iterrows():
             customer = row.to_dict()
             try:
-                response = requests.post("http://localhost:8000/predict", json=customer)
+                response = requests.post(
+                    f"{API_URL}/predict",
+                    json=customer,
+                    headers={"X-API-Key": API_KEY}
+                )
                 result = response.json()
                 results.append({
                     "Customer #": i + 1,

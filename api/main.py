@@ -1,12 +1,12 @@
 import os
 import joblib
 import pandas as pd
-from fastapi import FastAPI, HTTPException
 from contextlib import asynccontextmanager
 from api.schemas import CustomerInput, PredictionOutput
 from src.preprocess import clean_data, encode_features, scale_features
 from dotenv import load_dotenv
-
+from api.auth import verify_api_key
+from fastapi import FastAPI, HTTPException, Depends
 load_dotenv()
 
 model = None
@@ -69,7 +69,7 @@ def health():
     return {"status": "healthy", "model_loaded": model is not None}
 
 
-@app.post("/predict", response_model=PredictionOutput)
+@app.post("/predict", response_model=PredictionOutput, dependencies=[Depends(verify_api_key)])
 def predict(customer: CustomerInput):
     try:
         data = pd.DataFrame([customer.model_dump()])
